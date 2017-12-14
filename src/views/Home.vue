@@ -66,7 +66,7 @@
           <ul>
             <li v-for="(question, index) in questions" :key="index">
               {{question.title}} | {{question.description}}
-              <span @click="questions.splice(index, 1)"><strong>X</strong></span>
+              <span @click="deleteQuestion(question)"><strong>X</strong></span>
             </li>
           </ul>
           
@@ -77,6 +77,8 @@
 </template>
 
 <script>
+import { mapActions, mapGetters } from 'vuex'
+
 import QuestionCardList from '@/components/QuestionCardList.vue'
 
 export default {
@@ -95,11 +97,15 @@ export default {
         title: '',
         dest: ''
       },
-        questions: [],
-        enableValidation: false
+      enableValidation: false
       }
     },
     methods: {
+      ...mapActions([
+        'addQuestion',
+        'deleteQuestion',
+        'presetQuestions'
+      ]),
       isValidQuestion(question) {
         if (question.title === '') return false;
         if (question.links.length === 0) return false;
@@ -141,73 +147,13 @@ export default {
           links: [],
           isRoot: false
         }
-      },
-      presetQuestions() {
-        this.questions = [
-          {
-            title: 'Frontend',
-            description: 'Javascript and such',
-            isRoot: true,
-            links: [
-              {
-                title: 'Vue.js',
-                dest: '1'
-              },
-              {
-                title: 'Elm',
-                dest: '2'
-              },
-              {
-                title: 'React',
-                dest: '3'
-              }
-            ]
-          },
-          {
-            title: 'Backend',
-            description: 'Runs on your server?',
-            isRoot: true,
-            links: [
-              {
-                title: 'Phoenix/Elixir',
-                dest: '1'
-              },
-              {
-                title: 'Django/Python',
-                dest: '2'
-              },
-              {
-                title: 'Flask/Python',
-                dest: '3'
-              }
-            ]
-          },
-          {
-            title: 'Nativeish',
-            description: 'Apps and such',
-            isRoot: true,
-            links: [
-              {
-                title: 'Electron',
-                dest: '1'
-              },
-              {
-                title: 'Android',
-                dest: '2'
-              },
-              {
-                title: 'iOS',
-                dest: '3'
-              }
-            ]
-          }
-        ]
       }
     },
     computed: {
-      rootQuestions() {
-        return this.questions.filter(question => question.isRoot);
-      }
+      ...mapGetters([
+        'questions',
+        'rootQuestions'
+      ])
     }
   }
 </script>
