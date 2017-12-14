@@ -21,7 +21,7 @@
                   <td>
                       <template v-if="newQuestion.links.length > 0">
                         <ul>
-                          <li v-for="(link, index) in newQuestion.links">
+                          <li v-for="(link, index) in newQuestion.links" :key="index">
                             {{link.title}}-> {{link.dest}}
                             <span @click="newQuestion.links.splice(index, 1)"><strong>X</strong></span>
                           </li>
@@ -37,7 +37,7 @@
                   <td><input type="checkbox" v-model="newQuestion.isRoot"></td>
                 </tr>
                 <tr>
-                  <td colspan=2><button @click="addQuestion">Add question</button></td>
+                  <td colspan=2><button @click="saveQuestion">Add question</button></td>
                 </tr>
               </table>
             </div>
@@ -118,12 +118,12 @@ export default {
 
         return true;
       },
-      addQuestion() {
+      saveQuestion() {
         if (this.enableValidation && !this.isValidQuestion(this.newQuestion)) {
           return
         }
 
-        this.questions.push(this.newQuestion)
+        this.addQuestion(this.newQuestion)
         this.resetNewQuestion()
       },
       addLink() {

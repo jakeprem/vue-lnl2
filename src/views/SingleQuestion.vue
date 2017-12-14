@@ -2,22 +2,27 @@
   <div class="container">
     <div class="row">
       <div class="col">
-        <question :question="question"></question>
+        <question :question="loadedQuestion"></question>
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
+
 import Question from '@/components/Question'
 
 export default {
   components: {
     Question
   },
-  data() {
-    return {
-      question: {}
+  computed: {
+    ...mapGetters([
+      'questions'
+    ]),
+    loadedQuestion() {
+      return this.questions[this.$route.params.id]
     }
   }
 }
