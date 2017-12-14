@@ -100,15 +100,6 @@ export default {
       }
     },
     methods: {
-      loadLink(dest) {
-        if (dest.startsWith('http://') || dest.startsWith('https://')) {
-          window.open(dest)
-        } else {
-          window.open('https://' + dest)
-        }
-
-        
-      },
       isValidQuestion(question) {
         if (question.title === '') return false;
         if (question.links.length === 0) return false;
@@ -160,15 +151,15 @@ export default {
             links: [
               {
                 title: 'Vue.js',
-                dest: 'https://vuejs.org/'
+                dest: '1'
               },
               {
                 title: 'Elm',
-                dest: 'http://elm-lang.org/'
+                dest: '2'
               },
               {
                 title: 'React',
-                dest: 'https://reactjs.org/'
+                dest: '3'
               }
             ]
           },
@@ -179,15 +170,15 @@ export default {
             links: [
               {
                 title: 'Phoenix/Elixir',
-                dest: 'http://phoenixframework.org/'
+                dest: '1'
               },
               {
                 title: 'Django/Python',
-                dest: 'https://www.djangoproject.com/'
+                dest: '2'
               },
               {
                 title: 'Flask/Python',
-                dest: 'http://flask.pocoo.org/'
+                dest: '3'
               }
             ]
           },
@@ -198,15 +189,15 @@ export default {
             links: [
               {
                 title: 'Electron',
-                dest: 'www.google.com'
+                dest: '1'
               },
               {
                 title: 'Android',
-                dest: 'www.google.com'
+                dest: '2'
               },
               {
                 title: 'iOS',
-                dest: 'www.google.com'
+                dest: '3'
               }
             ]
           }
