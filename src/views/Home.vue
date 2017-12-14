@@ -1,27 +1,6 @@
 <template>
   <div>
-      <div class="container">
-        <div class="row">
-          <div class="col" v-for="question in rootQuestions">
-              <div class="card" style="width: 20rem;">
-                  <div class="card-block">
-                    <h4 class="card-title">{{question.title}}</h4>
-                    <p class="card-text">{{question.description}}</p>
-                    <table>
-                      <tr v-for="link in question.links">
-                        <td>
-                          <a href="#" class="btn btn-primary" @click="loadLink(link.dest)">{{link.title}}</a>
-                          <a :href="link.dest">{{link.title}}</a>
-                        </td>
-                      </tr>
-                    </table>
-                  </div>
-                </div>
-          </div>
-        </div>
-          
-        </div>
-
+        <question-card-list :questions="rootQuestions"></question-card-list>
         <hr>
         <div class="container">
           <div class="row">
@@ -85,7 +64,7 @@
           <br>
 
           <ul>
-            <li v-for="(question, index) in questions">
+            <li v-for="(question, index) in questions" :key="index">
               {{question.title}} | {{question.description}}
               <span @click="questions.splice(index, 1)"><strong>X</strong></span>
             </li>
@@ -98,144 +77,148 @@
 </template>
 
 <script>
+import QuestionCardList from '@/components/QuestionCardList.vue'
+
 export default {
-      data() {
-        return {
-          newQuestion: {
-            title: '',
-            description: '',
-            links: [],
-            isRoot: false
-          },
-          newLink: {
-            title: '',
-            dest: ''
-          },
-            questions: [],
-            enableValidation: false
-          }
+  components: {
+    QuestionCardList
+  },
+  data() {
+    return {
+      newQuestion: {
+        title: '',
+        description: '',
+        links: [],
+        isRoot: false
+      },
+      newLink: {
+        title: '',
+        dest: ''
+      },
+        questions: [],
+        enableValidation: false
+      }
+    },
+    methods: {
+      loadLink(dest) {
+        if (dest.startsWith('http://') || dest.startsWith('https://')) {
+          window.open(dest)
+        } else {
+          window.open('https://' + dest)
         }
-        ,
-      methods: {
-        loadLink(dest) {
-          if (dest.startsWith('http://') || dest.startsWith('https://')) {
-            window.open(dest)
-          } else {
-            window.open('https://' + dest)
-          }
 
-          
-        },
-        isValidQuestion(question) {
-          if (question.title === '') return false;
-          if (question.links.length === 0) return false;
+        
+      },
+      isValidQuestion(question) {
+        if (question.title === '') return false;
+        if (question.links.length === 0) return false;
 
-          return true;
-        },
-        isValidLink(link) {
-          if (link.title === '') return false;
-          if (link.dest === '') return false;
+        return true;
+      },
+      isValidLink(link) {
+        if (link.title === '') return false;
+        if (link.dest === '') return false;
 
-          return true;
-        },
-        addQuestion() {
-          if (this.enableValidation && !this.isValidQuestion(this.newQuestion)) {
-            return
-          }
+        return true;
+      },
+      addQuestion() {
+        if (this.enableValidation && !this.isValidQuestion(this.newQuestion)) {
+          return
+        }
 
-          this.questions.push(this.newQuestion)
-          this.resetNewQuestion()
-        },
-        addLink() {
-          if (this.enableValidation && !this.isValidLink(this.newLink)) {
-            return
-          }
+        this.questions.push(this.newQuestion)
+        this.resetNewQuestion()
+      },
+      addLink() {
+        if (this.enableValidation && !this.isValidLink(this.newLink)) {
+          return
+        }
 
-          this.newQuestion.links.push(this.newLink)
-          this.resetNewLink()
-        },
-        resetNewLink() {
-          this.newLink = {
-            title: '',
-            dest: ''
-          }
-        },
-        resetNewQuestion() {
-          this.newQuestion = {
-            title: '',
-            description: '',
-            links: [],
-            isRoot: false
-          }
-        },
-        presetQuestions() {
-          this.questions = [
-            {
-              title: 'Frontend',
-              description: 'Javascript and such',
-              isRoot: true,
-              links: [
-                {
-                  title: 'Vue.js',
-                  dest: 'https://vuejs.org/'
-                },
-                {
-                  title: 'Elm',
-                  dest: 'http://elm-lang.org/'
-                },
-                {
-                  title: 'React',
-                  dest: 'https://reactjs.org/'
-                }
-              ]
-            },
-            {
-              title: 'Backend',
-              description: 'Runs on your server?',
-              isRoot: true,
-              links: [
-                {
-                  title: 'Phoenix/Elixir',
-                  dest: 'http://phoenixframework.org/'
-                },
-                {
-                  title: 'Django/Python',
-                  dest: 'https://www.djangoproject.com/'
-                },
-                {
-                  title: 'Flask/Python',
-                  dest: 'http://flask.pocoo.org/'
-                }
-              ]
-            },
-            {
-              title: 'Nativeish',
-              description: 'Apps and such',
-              isRoot: true,
-              links: [
-                {
-                  title: 'Electron',
-                  dest: 'www.google.com'
-                },
-                {
-                  title: 'Android',
-                  dest: 'www.google.com'
-                },
-                {
-                  title: 'iOS',
-                  dest: 'www.google.com'
-                }
-              ]
-            }
-          ]
+        this.newQuestion.links.push(this.newLink)
+        this.resetNewLink()
+      },
+      resetNewLink() {
+        this.newLink = {
+          title: '',
+          dest: ''
         }
       },
-      computed: {
-        rootQuestions() {
-          return this.questions.filter(question => question.isRoot);
+      resetNewQuestion() {
+        this.newQuestion = {
+          title: '',
+          description: '',
+          links: [],
+          isRoot: false
         }
+      },
+      presetQuestions() {
+        this.questions = [
+          {
+            title: 'Frontend',
+            description: 'Javascript and such',
+            isRoot: true,
+            links: [
+              {
+                title: 'Vue.js',
+                dest: 'https://vuejs.org/'
+              },
+              {
+                title: 'Elm',
+                dest: 'http://elm-lang.org/'
+              },
+              {
+                title: 'React',
+                dest: 'https://reactjs.org/'
+              }
+            ]
+          },
+          {
+            title: 'Backend',
+            description: 'Runs on your server?',
+            isRoot: true,
+            links: [
+              {
+                title: 'Phoenix/Elixir',
+                dest: 'http://phoenixframework.org/'
+              },
+              {
+                title: 'Django/Python',
+                dest: 'https://www.djangoproject.com/'
+              },
+              {
+                title: 'Flask/Python',
+                dest: 'http://flask.pocoo.org/'
+              }
+            ]
+          },
+          {
+            title: 'Nativeish',
+            description: 'Apps and such',
+            isRoot: true,
+            links: [
+              {
+                title: 'Electron',
+                dest: 'www.google.com'
+              },
+              {
+                title: 'Android',
+                dest: 'www.google.com'
+              },
+              {
+                title: 'iOS',
+                dest: 'www.google.com'
+              }
+            ]
+          }
+        ]
+      }
+    },
+    computed: {
+      rootQuestions() {
+        return this.questions.filter(question => question.isRoot);
       }
     }
+  }
 </script>
 
 <style>
